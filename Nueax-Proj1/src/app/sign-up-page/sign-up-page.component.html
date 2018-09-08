@@ -1,0 +1,33 @@
+<div>
+  <form [formGroup]="SignUpForm" (ngSubmit)="Firebase_SignUp(SignUpForm.value)">
+
+    <div>
+      <label>FirstName</label>
+      <input type="text" formControlName="FirstName">
+    </div>
+
+    <div>
+      <label>LastName</label>
+      <input type="text" formControlName="LastName">
+    </div>
+
+    <div>
+      <label>Contact</label>
+      <input type="text" formControlName="Contact">
+    </div>
+
+    <div>
+      <label>EmailId</label>
+      <input type="text" formControlName="EmailId">
+    </div>
+
+    <div>
+      <label>Password</label>
+      <input type="Password" formControlName="Password">
+    </div>
+    
+    <div>
+      <button type="Submit">SignUp</button>
+    </div>
+  </form>
+</div>
