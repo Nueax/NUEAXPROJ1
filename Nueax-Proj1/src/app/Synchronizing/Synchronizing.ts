@@ -8,12 +8,13 @@ import {AngularFireAuth} from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 //----------------------------------------------
 
+
 @NgModule({
 
  imports: [
             CommonModule,
           ],
- exports: [RouterModule],
+ exports: [],
  declarations: []
 
 })
@@ -23,14 +24,50 @@ export class Synchronizing
     
     private Uid:any;
     
-    constructor(private Local_Time_Stamp:ServicesService,private AngularFireAuth:AngularFireAuth,
+    constructor(private Local_Host_Service:ServicesService,private AngularFireAuth:AngularFireAuth,
                 private AFDB:AngularFireDatabase,private LocalHostData:ServicesService){}
     
-    Synchronizing_Data() 
+    Synchronizing() 
     {
-        this.Uid = this.AngularFireAuth.auth.currentUser.uid;
-        this.Get_Firebase_TimeStamp();
+        this.Get_Local_Host_SignUp_Info();
+        console.log("check");
+        var User = this.AngularFireAuth.auth.currentUser;
+        if(User!=null)
+        {
+            this.Uid = this.AngularFireAuth.auth.currentUser.uid;
+            console.log("Null");
+            this.Get_Firebase_TimeStamp();
+        }
     }
+
+    Get_Local_Host_SignUp_Info()
+    {
+        this.Local_Host_Service.Get_EmailId_Password_From_LocalHost()
+            .subscribe(Email_Password_Arr=>{
+                                                for(var i=0;i<Email_Password_Arr.length;i++)
+                                                this.SignUp_Synchronisation(Email_Password_Arr[i]["EmailId"],Email_Password_Arr[i]["Password"]);
+                                           })        
+    }
+
+    SignUp_Synchronisation(EmailId,Password)
+    {
+        var no_error;
+        this.AngularFireAuth.auth.createUserWithEmailAndPassword(EmailId,Password)
+         .catch(
+                 Info=>{
+                          //this.Sign_Up_Error_Message(Info.message);
+                          console.log(Info.message);
+                          no_error=false;
+                       }
+               ).then(Info=>{
+                                if(no_error==true)
+                               {
+                                 console.log("SignUp Sucessfully")
+                               }
+                            }
+                      );
+    }
+
 
     Get_Firebase_TimeStamp()
     {
@@ -46,7 +83,7 @@ export class Synchronizing
 
     Get_LocalHost_TimeStamp(Email_Id,Firebase_TimeStamp)
     {
-        this.Local_Time_Stamp.Get_LocalHost_Time_Stamp(Email_Id)
+        this.Local_Host_Service.Get_LocalHost_Time_Stamp(Email_Id)
         .subscribe(LocalHost_Time_Stamp=>{
                             console.log(Firebase_TimeStamp);
                             console.log(LocalHost_Time_Stamp[1]);

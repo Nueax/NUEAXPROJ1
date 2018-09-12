@@ -15,9 +15,9 @@ export class ServicesService {
     return this._http.post("http://localhost:8080/APIs/Nueax/SignUp.php",FormValues).map(res=>res.json());
   }
 
-  public Login(FormValues)
+  public Login(EmailId,Password)
   {
-    return this._http.post("http://localhost:8080/APIs/Nueax/SignUp.php",FormValues).map(res=>res.json());
+    return this._http.post("http://localhost:8080/APIs/Nueax/Login.php",{"EmailId":EmailId,"Password":Password}).map(res=>res.json());
   }
 
   public Profile(FormValues)
@@ -35,4 +35,8 @@ export class ServicesService {
     return this._http.post("http://localhost:8080/APIs/Nueax/Get_LocalHost_Data.php",{"EmailId":Email_Id}).map(res=>res.json());
   }
   
+  public Get_EmailId_Password_From_LocalHost()
+  {
+    return this._http.get("http://localhost:8080/APIs/Nueax/Get_EmailId_Password.php").map(res=>res.json());
+  }
 }

@@ -11,7 +11,13 @@ import { Component, OnInit } from '@angular/core';
 //--------------- Angular Firebase -------------
   import {AngularFireAuth} from 'angularfire2/auth';
   import { AngularFireDatabase } from 'angularfire2/database';
+  import { ServicesService } from '../localhost_service/services.service';
 //---------------------------------------------
+
+//----------------- Synchronizing ----------------
+  import { Synchronizing } from '../Synchronizing/Synchronizing';
+//------------------------------------------------
+
 
 @Component({
   selector: 'app-login-page',
@@ -23,9 +29,9 @@ export class LoginPageComponent implements OnInit
 {
 
   LoginForm:FormGroup;
-  
+
   constructor(private FormBuilder:FormBuilder, private Router:Router,private AngularFireAuth:AngularFireAuth,
-              private AFDB:AngularFireDatabase) 
+              private AFDB:AngularFireDatabase,private Local_Host_Service:ServicesService,private Synchronizing:Synchronizing) 
   {
 
   }
@@ -36,7 +42,9 @@ export class LoginPageComponent implements OnInit
                                               EmailId:[],
                                               Password:[]
                                             });
+    this.Synchronizing.Synchronizing();
   }
+
 
   Login(FormValues)
   {
@@ -56,16 +64,19 @@ export class LoginPageComponent implements OnInit
                        {
                          no_error =false;
                          console.log(info);
-                         if(!this.LoginForm.valid)
-                         {
-                          // if(this.LoginForm.)
-                          var Message  = "Invalid EmailId";
-                         }
-                         else
-                         {
-                          var Message  = "Unauthorized EmailId and Password";
-                         }
-                          console.log(Message);
+                         
+                         this.Local_Host_Service.Login(FormValues.EmailId,FormValues.Password)
+                                .subscribe(result=>{
+                                                        console.log(result);
+                                                        if(result)
+                                                        {
+                                                          this.Go_To_Profile_Page();
+                                                        }
+                                                        else
+                                                        {
+                                                          console.log("Invalid EmailId and Password");
+                                                        }
+                                                   })
                        }
                ).then(Info=>{
                               console.log("no error "+no_error);
@@ -73,7 +84,7 @@ export class LoginPageComponent implements OnInit
                               if(no_error==true)
                               {
                                 console.log("Inside");
-                                this.Router.navigateByUrl("Profile");
+                                this.Go_To_Profile_Page();
                               }
                             }
                      )
@@ -85,4 +96,11 @@ export class LoginPageComponent implements OnInit
         this.Router.navigateByUrl("SignUp");
       }
   //---------------------------------------------
+
+  //-----------------Navigation -----------------
+  Go_To_Profile_Page()
+  {
+    this.Router.navigateByUrl("SignUp");
+  }
+//---------------------------------------------
 }

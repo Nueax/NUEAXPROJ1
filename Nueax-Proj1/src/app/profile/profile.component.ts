@@ -34,7 +34,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() 
   {
-    this.Synchronizing.Synchronizing_Data();
+    this.Synchronizing.Synchronizing();
     
     this.Uid = this.AngularFireAuth.auth.currentUser.uid;
     this.ProfileForm = this.FormBuilder.group({
@@ -52,8 +52,8 @@ export class ProfileComponent implements OnInit {
   {  
     this.Localhost_Service.Profile(FormValues).subscribe(res=>{
                                                                 console.log(res);
-                                                                this.Firebase_Data_Insertion(FormValues);
                                                               });
+    this.Firebase_Data_Insertion(FormValues);
   }
 
   
