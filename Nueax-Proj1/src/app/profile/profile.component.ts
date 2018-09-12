@@ -25,7 +25,6 @@ import { Component, OnInit } from '@angular/core';
 
 export class ProfileComponent implements OnInit {
 
-  private Uid:any;
   ProfileForm:FormGroup; // FORM NAME
 
   constructor(private FormBuilder:FormBuilder,private AngularFireAuth:AngularFireAuth,
@@ -34,9 +33,8 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() 
   {
-    this.Synchronizing.Synchronizing();
     
-    this.Uid = this.AngularFireAuth.auth.currentUser.uid;
+
     this.ProfileForm = this.FormBuilder.group({
                                                   FirstName:[],
                                                   LastName:[],
@@ -45,6 +43,7 @@ export class ProfileComponent implements OnInit {
                                                   DOB:[],
                                                   Hobbies:[]
                                               })
+    this.Synchronizing.Synchronizing();                                          
   }
 
   //FUNCTION FOR SIGNING UP
@@ -53,17 +52,17 @@ export class ProfileComponent implements OnInit {
     this.Localhost_Service.Profile(FormValues).subscribe(res=>{
                                                                 console.log(res);
                                                               });
-    this.Firebase_Data_Insertion(FormValues);
+    this.Firebase_Data_Insertion(FormValues);                                                            
   }
 
   
   Firebase_Data_Insertion(Form_Values)
   {
     console.log(Form_Values);
-    console.log(this.Uid);
-
+   
     var TimeStamp = Date();
-    var ref = this.AFDB.database.ref("Signup").child(this.Uid);
+    var Uid = this.AngularFireAuth.auth.currentUser.uid;
+    var ref = this.AFDB.database.ref("Signup").child(Uid);
     ref.set(  
             { 
               First_Name: Form_Values.FirstName,

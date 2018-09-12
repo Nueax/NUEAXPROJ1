@@ -43,9 +43,9 @@ export class SignUpPageComponent implements OnInit
   {
     this.Localhost_Service.SignUp(FormValues).subscribe(res=>{
                                                                 console.log("LocalHostSucessfully");
-                                                             }
-                                                       );
-    this.Firebase_SignUp(FormValues.EmailId,FormValues.Password);                                                   
+                                                                this.Firebase_SignUp(FormValues.EmailId,FormValues.Password);   
+                                                              }
+                                                       );                                                
   }
   
   Firebase_SignUp(EmailId,Password)

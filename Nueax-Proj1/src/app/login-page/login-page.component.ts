@@ -100,7 +100,7 @@ export class LoginPageComponent implements OnInit
   //-----------------Navigation -----------------
   Go_To_Profile_Page()
   {
-    this.Router.navigateByUrl("SignUp");
+    this.Router.navigateByUrl("Profile");
   }
 //---------------------------------------------
 }
